@@ -68,13 +68,14 @@ Rectangle pit = { 360, GetScreenHeight()/2.5f - 100, 80, 80 };
 
 Rectangle key = { 500, GetScreenHeight()/2.5f - 100, 30, 30 };
 
-bool collision{};
-bool game_end{false};
+bool collision{}; //collision bool
+bool have_key{}; //bool for having key
+bool game_end{false}; //bool to end game
 
 
 while(!WindowShouldClose()){
 
-if(CheckCollisionRecs(player.rect,boxA)){
+if(CheckCollisionRecs(player.rect,boxA)){ //collision detection for enemies and obstacles
 		collision = true;
 	}
 if(CheckCollisionRecs(player.rect,boxB)){
@@ -92,6 +93,9 @@ if(CheckCollisionRecs(player.rect,boxE)){
 if(CheckCollisionRecs(player.rect,pit)){
 		collision = true;
 	}
+if(CheckCollisionRecs(player.rect,key)){ //check to see if the player has picked up the key
+        have_key = true;
+}
 
 for (int i = 0; i < num_bullets; i++) //Shoot code. Credit to https://github.com/naoisecollins/scarfyJump/blob/master/scarfyJump.cpp.
     {
@@ -160,14 +164,17 @@ if (collision) {
 }
 else{
 
-DrawRectangleRec(player.rect,player.color);
+DrawRectangleRec(player.rect,player.color); //draw the sprites if the game is not over
 DrawRectangleRec(boxA, GOLD);
 DrawRectangleRec(boxB, RED);
 DrawRectangleRec(boxC, RED);
 DrawRectangleRec(boxD, RED);
 DrawRectangleRec(boxE, RED);
 DrawRectangleRec(pit, PURPLE);
-DrawRectangleRec(key, YELLOW);
+}
+
+if (!have_key) {
+DrawRectangleRec(key, YELLOW); //have the key disappear if the player picks it up, and be drawn if they have not.
 }
 
 EndDrawing();
