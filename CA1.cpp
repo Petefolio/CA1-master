@@ -5,12 +5,13 @@ struct Player { //struct for player
     Color color;
 };
 
-struct Bullets{ //struct for bullets
+struct Bullets{ //struct for bullets. Credit to https://github.com/naoisecollins/scarfyJump/blob/master/scarfyJump.cpp.
 	Rectangle rect;
 	Vector2 speed; 
 	Color color;
 	bool active;
 };
+//End of credit.
 
 int main() {
 const int windowWidth{500};
@@ -48,7 +49,8 @@ Sound sound = LoadSound("resources/pistol.wav");
 PlayMusicStream(music);
 
 Rectangle boxA = { 10, GetScreenHeight()/2.0f - 50, 200, 100 }; //rectangle enemy placeholders
-int boxASpeedX = 4; //boxA code taken from https://www.raylib.com/examples.html "collision area"
+int boxASpeedX = 4; //Credit to: https://www.raylib.com/examples.html "collision area"
+//End of credit
 
 Rectangle boxB = { 100, GetScreenHeight()/4.0f - 100, 50, 50 };
 int boxBSpeedY = 4;
@@ -63,6 +65,8 @@ Rectangle boxE = { 150, GetScreenHeight()/1.1f - 100, 50, 50 };
 int boxESpeedY = 4;
 
 Rectangle pit = { 360, GetScreenHeight()/2.5f - 100, 80, 80 };
+
+Rectangle key = { 500, GetScreenHeight()/2.5f - 100, 30, 30 };
 
 bool collision{};
 bool game_end{false};
@@ -89,7 +93,7 @@ if(CheckCollisionRecs(player.rect,pit)){
 		collision = true;
 	}
 
-for (int i = 0; i < num_bullets; i++)
+for (int i = 0; i < num_bullets; i++) //Shoot code. Credit to https://github.com/naoisecollins/scarfyJump/blob/master/scarfyJump.cpp.
     {
         if (bullet[i].active)
             DrawRectangleRec(bullet[i].rect, bullet[i].color);
@@ -117,7 +121,7 @@ for (int i = 0; i < num_bullets; i++)
         if (bullet[i].active)
         {
            
-            bullet[i].rect.x += bullet[i].speed.y;
+            bullet[i].rect.x += bullet[i].speed.y; //Change made: added speed to the X position of the bullet instead of the Y.
 
             if (bullet[i].rect.y <= 0) 
             {
@@ -126,8 +130,10 @@ for (int i = 0; i < num_bullets; i++)
             }
         }
     }
+//End of credit.
 
 if (((boxA.x + boxA.width) >= GetScreenWidth()) || (boxA.x <= 0)) boxASpeedX *= -1;
+//Enemy movement. Credit to: https://www.raylib.com/examples.html "collision area". End of credit.
 
 if (IsKeyDown(KEY_D))
 {
@@ -147,7 +153,7 @@ if (IsKeyDown(KEY_W))
 }
 BeginDrawing();
 
-boxA.x += boxASpeedX;
+boxA.x += boxASpeedX; //Enemy movement. Credit to: https://www.raylib.com/examples.html "collision area". End of credit
 ClearBackground(WHITE);
 if (collision) {
  DrawText("Game Over",GetScreenHeight()/2.0f, GetScreenHeight()/2.0f, 50, PURPLE); //game over screen
@@ -161,6 +167,7 @@ DrawRectangleRec(boxC, RED);
 DrawRectangleRec(boxD, RED);
 DrawRectangleRec(boxE, RED);
 DrawRectangleRec(pit, PURPLE);
+DrawRectangleRec(key, YELLOW);
 }
 
 EndDrawing();
