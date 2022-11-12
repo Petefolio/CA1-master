@@ -1,11 +1,11 @@
 #include "raylib.h"
-struct Player {
+struct Player { //struct for player
     Rectangle rect;
     Vector2 speed;
     Color color;
 };
 
-struct Bullets{
+struct Bullets{ //struct for bullets
 	Rectangle rect;
 	Vector2 speed; 
 	Color color;
@@ -47,8 +47,8 @@ Music music = LoadMusicStream("resources/bg_music.wav");
 Sound sound = LoadSound("resources/pistol.wav");
 PlayMusicStream(music);
 
-Rectangle boxA = { 10, GetScreenHeight()/2.0f - 50, 200, 100 };
-int boxASpeedX = 4;
+Rectangle boxA = { 10, GetScreenHeight()/2.0f - 50, 200, 100 }; //rectangle enemy placeholders
+int boxASpeedX = 4; //boxA code taken from https://www.raylib.com/examples.html "collision area"
 
 Rectangle boxB = { 100, GetScreenHeight()/4.0f - 100, 50, 50 };
 int boxBSpeedY = 4;
@@ -69,15 +69,6 @@ bool game_end{false};
 
 
 while(!WindowShouldClose()){
-BeginDrawing();
-DrawRectangleRec(player.rect,player.color);
-DrawRectangleRec(boxA, GOLD);
-DrawRectangleRec(boxB, RED);
-DrawRectangleRec(boxC, RED);
-DrawRectangleRec(boxD, RED);
-DrawRectangleRec(boxE, RED);
-DrawRectangleRec(pit, PURPLE);
-boxA.x += boxASpeedX;
 
 if(CheckCollisionRecs(player.rect,boxA)){
 		collision = true;
@@ -97,16 +88,6 @@ if(CheckCollisionRecs(player.rect,boxE)){
 if(CheckCollisionRecs(player.rect,pit)){
 		collision = true;
 	}
-if (collision && life_counter > 0) {
-   player.rect.x = windowWidth/2;
-    player.rect.y = windowHeight-player.rect.height;
-    life_counter = life_counter - 1;
-    collision = false;
-}
-if (life_counter < 0) {
-    game_end = true;
-}
-
 
 for (int i = 0; i < num_bullets; i++)
     {
@@ -164,8 +145,24 @@ if (IsKeyDown(KEY_W))
 {
     player.rect.y = player.rect.y-10;
 }
+BeginDrawing();
 
+boxA.x += boxASpeedX;
 ClearBackground(WHITE);
+if (collision) {
+ DrawText("Game Over",GetScreenHeight()/2.0f, GetScreenHeight()/2.0f, 50, PURPLE); //game over screen
+}
+else{
+
+DrawRectangleRec(player.rect,player.color);
+DrawRectangleRec(boxA, GOLD);
+DrawRectangleRec(boxB, RED);
+DrawRectangleRec(boxC, RED);
+DrawRectangleRec(boxD, RED);
+DrawRectangleRec(boxE, RED);
+DrawRectangleRec(pit, PURPLE);
+}
+
 EndDrawing();
 }
 CloseAudioDevice(); 
