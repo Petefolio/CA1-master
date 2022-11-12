@@ -68,6 +68,8 @@ Rectangle pit = { 360, GetScreenHeight()/2.5f - 100, 80, 80 };
 
 Rectangle key = { 500, GetScreenHeight()/2.5f - 100, 30, 30 };
 
+Rectangle door = {GetScreenWidth()/2.0f, GetScreenHeight()- 500, 60, 10 };
+
 bool collision{}; //collision bool
 bool have_key{}; //bool for having key
 bool game_end{false}; //bool to end game
@@ -95,6 +97,13 @@ if(CheckCollisionRecs(player.rect,pit)){
 	}
 if(CheckCollisionRecs(player.rect,key)){ //check to see if the player has picked up the key
         have_key = true;
+}
+
+if(CheckCollisionRecs(player.rect,pit)){
+		collision = true;
+}
+if(CheckCollisionRecs(player.rect, door) && have_key){
+    game_end = true; //end the game if the player passes through the door carrying the key
 }
 
 for (int i = 0; i < num_bullets; i++) //Shoot code. Credit to https://github.com/naoisecollins/scarfyJump/blob/master/scarfyJump.cpp.
@@ -162,6 +171,9 @@ ClearBackground(WHITE);
 if (collision) {
  DrawText("Game Over",GetScreenHeight()/2.0f, GetScreenHeight()/2.0f, 50, PURPLE); //game over screen
 }
+if (game_end){
+   DrawText("You win!",GetScreenHeight()/2.0f, GetScreenHeight()/2.0f, 50, PURPLE); 
+}
 else{
 
 DrawRectangleRec(player.rect,player.color); //draw the sprites if the game is not over
@@ -171,6 +183,7 @@ DrawRectangleRec(boxC, RED);
 DrawRectangleRec(boxD, RED);
 DrawRectangleRec(boxE, RED);
 DrawRectangleRec(pit, PURPLE);
+DrawRectangleRec(door, GREEN);
 }
 
 if (!have_key) {
