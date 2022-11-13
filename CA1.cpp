@@ -36,7 +36,7 @@ Bullets bullet[num_bullets];
 for (int i = 0; i<num_bullets; i++){
 bullet[i].rect.height= 10;
 bullet[i].rect.width = 10;
-bullet[i].color = GREEN;
+bullet[i].color = BLACK; //changed the color of the bullets from green to black 
 bullet[i].rect.x = (windowWidth/2)+(player.rect.width/2)-(bullet[i].rect.width/2);
 bullet[i].rect.y = (windowHeight-player.rect.height)-(bullet[i].rect.height);
 bullet[i].speed.x = 50;
@@ -103,7 +103,7 @@ if(CheckCollisionRecs(player.rect,pit)){
 		collision = true;
 }
 if(CheckCollisionRecs(player.rect, door) && have_key){
-    game_end = true; //end the game if the player passes through the door carrying the key
+    game_end = true; //end the game if the player passes through the door carrying the
 }
 
 for (int i = 0; i < num_bullets; i++) //Shoot code. Credit to https://github.com/naoisecollins/scarfyJump/blob/master/scarfyJump.cpp.
@@ -171,8 +171,8 @@ ClearBackground(WHITE);
 if (collision) {
  DrawText("Game Over",GetScreenHeight()/2.0f, GetScreenHeight()/2.0f, 50, PURPLE); //game over screen
 }
-if (game_end){
-   DrawText("You win!",GetScreenHeight()/2.0f, GetScreenHeight()/2.0f, 50, PURPLE); 
+else if (game_end){ //else if statement to allow for both the game over and game win scenarios occur without error
+   DrawText("You win!",GetScreenHeight()/2.0f, GetScreenHeight()/2.0f, 50, PURPLE); //game win screen.
 }
 else{
 
