@@ -24,6 +24,16 @@ int num_bullets{50};
 InitWindow(800, 500, "Game");
 SetTargetFPS(60);
 
+Texture2D enemy = LoadTexture("resources/big_enemy.png");
+Texture2D asteroidA = LoadTexture("resources/asteroid.png");
+Texture2D asteroidB = LoadTexture("resources/asteroid.png");
+Texture2D asteroidC = LoadTexture("resources/asteroid.png");
+Texture2D asteroidD = LoadTexture("resources/asteroid.png");
+Texture2D disk = LoadTexture("resources/floppy_disk.png");
+Texture2D computer = LoadTexture("resources/computer.png");
+Texture2D blackhole = LoadTexture("resources/computer.png");
+Texture2D floppy = LoadTexture("resources/floppy_disk.png");
+
 Player player;
 player.rect.height= 35;
 player.rect.width = 35;
@@ -49,27 +59,46 @@ Music music = LoadMusicStream("resources/bg_music.wav");
 Sound sound = LoadSound("resources/pistol.wav");
 PlayMusicStream(music);
 
-Rectangle boxA = { 10, GetScreenHeight()/2.0f - 50, 200, 100 }; //rectangle enemy placeholders
-int boxASpeedX = 4; //Credit to: https://www.raylib.com/examples.html "collision area"
-//End of credit
+Rectangle boxA = { 10, GetScreenHeight()/2.0f - 50, 200, 100 };
+int boxASpeedX = 4; //Credit to: https://www.raylib.com/examples.html "collision area" End of credit
+Vector2 boxApos; 
+boxApos.x = 10;
+boxApos.y = GetScreenHeight()/2.0f - 50;
 
 Rectangle boxB = { 100, GetScreenHeight()/4.0f - 100, 50, 50 };
-int boxBSpeedY = 4;
+Vector2 boxBpos;
+boxBpos.x = 100;
+boxBpos.y = GetScreenHeight()/4.0f - 100;
 
 Rectangle boxC = { 650, GetScreenHeight()/4.0f - 100, 50, 50 };
-int boxCSpeedY = 4;
+Vector2 boxCpos;
+boxCpos.x = 650;
+boxCpos.y = GetScreenHeight()/4.0f - 100;
 
 Rectangle boxD = { 600, GetScreenHeight()/1.1f - 100, 50, 50 };
-int boxDSpeedY = 4;
+Vector2 boxDpos;
+boxDpos.x = 600;
+boxDpos.y = GetScreenHeight()/1.1f - 100;
 
 Rectangle boxE = { 150, GetScreenHeight()/1.1f - 100, 50, 50 };
-int boxESpeedY = 4;
+Vector2 boxEpos;
+boxEpos.x = 150;
+boxEpos.y = GetScreenHeight()/1.1f - 100;
 
 Rectangle pit = { 360, GetScreenHeight()/2.5f - 100, 80, 80 };
+Vector2 pitpos;
+pitpos.x = 360;
+pitpos.y = GetScreenHeight()/2.5f - 100;
 
 Rectangle key = { 500, GetScreenHeight()/2.5f - 100, 30, 30 };
+Vector2 keypos;
+keypos.x = 500;
+keypos.y = GetScreenHeight()/2.5f - 100;
 
 Rectangle door = {GetScreenWidth()/2.0f, GetScreenHeight()- 500, 60, 10 };
+Vector2 doorpos;
+doorpos.x = GetScreenWidth()/2.0f;
+doorpos.y = GetScreenHeight()- 500;
 
 bool collision{}; //collision bool
 bool have_key{}; //bool for having key
@@ -178,17 +207,17 @@ else if (game_end){ //else if statement to allow for both the game over and game
 else{
 
 DrawRectangleRec(player.rect,player.color); //draw the sprites if the game is not over
-DrawRectangleRec(boxA, GOLD);
-DrawRectangleRec(boxB, RED);
-DrawRectangleRec(boxC, RED);
-DrawRectangleRec(boxD, RED);
-DrawRectangleRec(boxE, RED);
-DrawRectangleRec(pit, PURPLE);
-DrawRectangleRec(door, GREEN);
+DrawTextureRec(enemy, boxA, boxApos, WHITE);
+DrawTextureRec(asteroidA, boxB, boxBpos, WHITE);
+DrawTextureRec(asteroidB, boxC, boxCpos, WHITE);
+DrawTextureRec(asteroidC, boxD, boxDpos, WHITE);
+DrawTextureRec(asteroidD, boxE, boxEpos, WHITE);
+DrawTextureRec(blackhole, pit, pitpos, WHITE);
+DrawTextureRec(computer, door, doorpos, WHITE);
 }
 
 if (!have_key) {
-DrawRectangleRec(key, YELLOW); //have the key disappear if the player picks it up, and hve itbe drawn if they have not.
+DrawTextureRec(floppy, key, keypos, WHITE); //have the key disappear if the player picks it up, and hve itbe drawn if they have not.
 }
 
 EndDrawing();
