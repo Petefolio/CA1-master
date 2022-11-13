@@ -117,18 +117,18 @@ else if (game_end){ //else if statement to say that if the game_end boolean is t
 else{ //if these booleans are not true then the following will be drawn.
 
 DrawRectangleRec(player.rect,player.color); //setting the measurements and colour of the player using the previously established variables from the player struct.
-DrawRectangleRec(enemy, GOLD);
-DrawRectangleRec(obstacleA, RED);
-DrawRectangleRec(obstacleB, RED); //setting the measurements of the obstacles and enemy using the previously established variables from their Rectangle structs. Also setting their colours.
-DrawRectangleRec(obstacleC, RED);
-DrawRectangleRec(obstacleD, RED);
-DrawRectangleRec(pit, PURPLE);
-DrawRectangleRec(door, GREEN);
+DrawRectangleRec(enemy, GOLD);//setting the measurements of the enemy and using the previously established variables from their Rectangle structs. Also setting its colours.
+DrawRectangleRec(obstacleA, RED);//setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
+DrawRectangleRec(obstacleB, RED); //setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
+DrawRectangleRec(obstacleC, RED);//setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
+DrawRectangleRec(obstacleD, RED);//setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
+DrawRectangleRec(pit, PURPLE);//setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
+DrawRectangleRec(door, GREEN);//setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
 DrawText("Collect the yellow key and", 20, 80, 20, BLACK); //instructional text to be displayer in the upper left hand area of the window.
 DrawText("escape through the green door!", 20, 100, 20, BLACK);//the bottom half of the instructional text to be displayer in the upper left hand area of the window.
 }
 
-if (!have_key) {
+if (!have_key) {//only draw the key if the have_key boolean is false.
 DrawRectangleRec(key, YELLOW); //have the key disappear if the player picks it up, and be drawn if they have not.
 }
 
