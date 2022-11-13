@@ -24,16 +24,6 @@ int num_bullets{50};
 InitWindow(800, 500, "Game");
 SetTargetFPS(60);
 
-Texture2D enemy = LoadTexture("resources/big_enemy.png");
-Texture2D asteroidA = LoadTexture("resources/asteroid.png");
-Texture2D asteroidB = LoadTexture("resources/asteroid.png");
-Texture2D asteroidC = LoadTexture("resources/asteroid.png");
-Texture2D asteroidD = LoadTexture("resources/asteroid.png");
-Texture2D disk = LoadTexture("resources/floppy_disk.png");
-Texture2D computer = LoadTexture("resources/computer.png");
-Texture2D blackhole = LoadTexture("resources/computer.png");
-Texture2D floppy = LoadTexture("resources/floppy_disk.png");
-
 Player player;
 player.rect.height= 35;
 player.rect.width = 35;
@@ -59,51 +49,32 @@ Music music = LoadMusicStream("resources/bg_music.wav");
 Sound sound = LoadSound("resources/pistol.wav");
 PlayMusicStream(music);
 
-Rectangle boxA = { 10, GetScreenHeight()/2.0f - 50, 200, 100 };
-int boxASpeedX = 4; //Credit to: https://www.raylib.com/examples.html "collision area" End of credit
-Vector2 boxApos; 
-boxApos.x = 10;
-boxApos.y = GetScreenHeight()/2.0f - 50;
+Rectangle boxA = { 10, GetScreenHeight()/2.0f - 50, 200, 100 }; //rectangle enemy placeholders
+int boxASpeedX = 4; //Credit to: https://www.raylib.com/examples.html "collision area"
+//End of credit
 
 Rectangle boxB = { 100, GetScreenHeight()/4.0f - 100, 50, 50 };
-Vector2 boxBpos;
-boxBpos.x = 100;
-boxBpos.y = GetScreenHeight()/4.0f - 100;
+int boxBSpeedY = 4;
 
 Rectangle boxC = { 650, GetScreenHeight()/4.0f - 100, 50, 50 };
-Vector2 boxCpos;
-boxCpos.x = 650;
-boxCpos.y = GetScreenHeight()/4.0f - 100;
+int boxCSpeedY = 4;
 
 Rectangle boxD = { 600, GetScreenHeight()/1.1f - 100, 50, 50 };
-Vector2 boxDpos;
-boxDpos.x = 600;
-boxDpos.y = GetScreenHeight()/1.1f - 100;
+int boxDSpeedY = 4;
 
 Rectangle boxE = { 150, GetScreenHeight()/1.1f - 100, 50, 50 };
-Vector2 boxEpos;
-boxEpos.x = 150;
-boxEpos.y = GetScreenHeight()/1.1f - 100;
+int boxESpeedY = 4;
 
 Rectangle pit = { 360, GetScreenHeight()/2.5f - 100, 80, 80 };
-Vector2 pitpos;
-pitpos.x = 360;
-pitpos.y = GetScreenHeight()/2.5f - 100;
 
 Rectangle key = { 500, GetScreenHeight()/2.5f - 100, 30, 30 };
-Vector2 keypos;
-keypos.x = 500;
-keypos.y = GetScreenHeight()/2.5f - 100;
 
 Rectangle door = {GetScreenWidth()/2.0f, GetScreenHeight()- 500, 60, 10 };
-Vector2 doorpos;
-doorpos.x = GetScreenWidth()/2.0f;
-doorpos.y = GetScreenHeight()- 500;
 
 bool collision{}; //collision bool
 bool have_key{}; //bool for having key
 bool game_end{false}; //bool to end game
-bool game_begin{false};
+bool dead_enemy{false}; //bool to kill enemies
 
 while(!WindowShouldClose()){
 
@@ -173,6 +144,12 @@ for (int i = 0; i < num_bullets; i++) //Shoot code. Credit to https://github.com
             }
         }
     }
+     for (int i = 0; i < num_bullets; i++)
+    {
+        if (bullet[i].active)
+        { 
+        if(CheckCollisionRecs(bullet[i].rect,boxA)){ //collision detection for enemies and obstacles
+		dead_enemy = true;}} //attempt at getting the enemies to die when bullets collide with them
 //End of credit.
 
 if (((boxA.x + boxA.width) >= GetScreenWidth()) || (boxA.x <= 0)) boxASpeedX *= -1;
@@ -207,21 +184,24 @@ else if (game_end){ //else if statement to allow for both the game over and game
 else{
 
 DrawRectangleRec(player.rect,player.color); //draw the sprites if the game is not over
-DrawTextureRec(enemy, boxA, boxApos, WHITE);
-DrawTextureRec(asteroidA, boxB, boxBpos, WHITE);
-DrawTextureRec(asteroidB, boxC, boxCpos, WHITE);
-DrawTextureRec(asteroidC, boxD, boxDpos, WHITE);
-DrawTextureRec(asteroidD, boxE, boxEpos, WHITE);
-DrawTextureRec(blackhole, pit, pitpos, WHITE);
-DrawTextureRec(computer, door, doorpos, WHITE);
+DrawRectangleRec(boxB, RED);
+DrawRectangleRec(boxC, RED);
+DrawRectangleRec(boxD, RED);
+DrawRectangleRec(boxE, RED);
+DrawRectangleRec(pit, PURPLE);
+DrawRectangleRec(door, GREEN);
 }
 
 if (!have_key) {
-DrawTextureRec(floppy, key, keypos, WHITE); //have the key disappear if the player picks it up, and hve itbe drawn if they have not.
+DrawRectangleRec(key, YELLOW); //have the key disappear if the player picks it up, and have it be drawn if they have not.
+}
+
+if(!dead_enemy) {
+DrawRectangleRec(boxA, GOLD);   
 }
 
 EndDrawing();
 }
 CloseAudioDevice(); 
 CloseWindow();
-}
+}}
