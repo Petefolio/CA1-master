@@ -20,6 +20,7 @@ int player_posX = 250;
 int player_posY = 250;
 int life_counter = 3;
 int num_bullets{50};
+
 InitWindow(800, 500, "Game");
 SetTargetFPS(60);
 
@@ -73,7 +74,7 @@ Rectangle door = {GetScreenWidth()/2.0f, GetScreenHeight()- 500, 60, 10 };
 bool collision{}; //collision bool
 bool have_key{}; //bool for having key
 bool game_end{false}; //bool to end game
-
+bool game_begin{false};
 
 while(!WindowShouldClose()){
 
@@ -187,7 +188,7 @@ DrawRectangleRec(door, GREEN);
 }
 
 if (!have_key) {
-DrawRectangleRec(key, YELLOW); //have the key disappear if the player picks it up, and be drawn if they have not.
+DrawRectangleRec(key, YELLOW); //have the key disappear if the player picks it up, and hve itbe drawn if they have not.
 }
 
 EndDrawing();
