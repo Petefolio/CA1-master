@@ -12,7 +12,7 @@ const int windowWidth{800}; //setd the constant integer value for the width of t
 const int windowHeight{500}; //sets the constant integer value for the height of the window.
 InitWindow(windowWidth, windowHeight, "CA1"); //initializes the window and setting its name.
 InitAudioDevice(); //initializes the audio device to allow for audio device management functions throughout the project.
-Texture2D background = LoadTexture("resources/");
+Texture2D background = LoadTexture("resources/dungeon_floor.jpg");
 SetTargetFPS(60); //sets the frame rate at which the game will aim to run.
 
 Player player; //Player structure which stores all of the players meta data for the player's main variables inside.
