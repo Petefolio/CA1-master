@@ -12,6 +12,7 @@ const int windowWidth{800}; //setd the constant integer value for the width of t
 const int windowHeight{500}; //sets the constant integer value for the height of the window.
 InitWindow(windowWidth, windowHeight, "CA1"); //initializes the window and setting its name.
 InitAudioDevice(); //initializes the audio device to allow for audio device management functions throughout the project.
+Texture2D background = LoadTexture("resources/");
 SetTargetFPS(60); //sets the frame rate at which the game will aim to run.
 
 Player player; //Player structure which stores all of the players meta data for the player's main variables inside.
@@ -28,7 +29,7 @@ Sound sound = LoadSound("resources/collect.wav"); //loads in a pick up sound eff
 PlayMusicStream(music); //starts the music playing.
 
 //Credit to: https://www.raylib.com/examples.html "collision area"
-Rectangle enemy = { 10, GetScreenHeight()/2.0f - 50, 200, 100 }; //stores the x position, y position(slightly over halfway up the screen height), hight, and width of the enemy.
+Rectangle enemy = { 10, GetScreenHeight()/2.0f - 50, 200, 100 }; //stores the x position, y position(slightly over halfway up the screen height), height, and width of the enemy.
 //Name  changed from "boxA" to "enemy".
 int enemySpeedX = 4; //defines the speed at which the enemy moves.
 //Name changed from "boxASpeedX" to "enemySpeedX".
@@ -46,7 +47,7 @@ Rectangle pit = { 360, GetScreenHeight()/2.5f - 100, 80, 80 }; //stores the x po
 
 Rectangle key = { 500, GetScreenHeight()/2.5f - 100, 30, 30 }; //stores the x position, y position(slightly over halfway up the screen height), hight, and width of the key.
 
-Rectangle door = {GetScreenWidth()/2.0f, GetScreenHeight()- 500, 60, 10 }; //stores the x position, y position(slightly over halfway up the screen height), hight, and width of the door.
+Rectangle door = {GetScreenWidth()/2.0f, GetScreenHeight()/1.0f - 500, 60, 10 }; //stores the x position, y position(slightly over halfway up the screen height), hight, and width of the door.
 
 bool collision{}; // boolean variable to detect whether or not a collision has occurred.
 bool have_key{}; //a boolean variable to detect whether or not the player has picked up the key.
@@ -55,85 +56,96 @@ bool game_end{false}; //a boolean variable to detect whether or not the end of t
 
 while(!WindowShouldClose()){ //everything within this while loop will occur while the window is open.
 
-UpdateMusicStream(music); //updating the music stream allows for the music to play continuously while the game is open.
+	UpdateMusicStream(music); //updating the music stream allows for the music to play continuously while the game is open.
 
-if(CheckCollisionRecs(player.rect,enemy)){ //if the player's rectangle comes into contact with the enemy's, the collision boolean is true.
-		collision = true;
+
+
+	if(CheckCollisionRecs(player.rect,enemy)){ //if the player's rectangle comes into contact with the enemy's, the collision boolean is true.
+			collision = true;
+		}
+	if(CheckCollisionRecs(player.rect,obstacleA)){ //if the player's rectangle comes into contact with the obstacle's, the collision boolean is true.
+			collision = true;
+		}
+	if(CheckCollisionRecs(player.rect,obstacleB)){ //if the player's rectangle comes into contact with the obstacle's, the collision boolean is true.
+			collision = true;
+		}
+	if(CheckCollisionRecs(player.rect,obstacleC)){ //if the player's rectangle comes into contact with the obstacle's, the collision boolean is true.
+			collision = true;
+		}
+	if(CheckCollisionRecs(player.rect,obstacleD)){//if the player's rectangle comes into contact with the obstacle's, the collision boolean is true.
+			collision = true;
+		}
+	if(CheckCollisionRecs(player.rect,pit)){//if the player's rectangle comes into contact with the pit's, the collision boolean is true.
+			collision = true;
+		}
+	if(CheckCollisionRecs(player.rect,key)){ //if the player's rectangle comes into contact with the key's, they have picked up the key.
+			PlaySound(sound); //a sound will play when the player's rectangle comes into contact with the key's.
+			have_key = true; //the state of having the key is true.
 	}
-if(CheckCollisionRecs(player.rect,obstacleA)){ //if the player's reectangle comes into contact with the obstacle's, the collision boolean is true.
-		collision = true;
+	if(CheckCollisionRecs(player.rect, door) && have_key){ 
+		game_end = true; //if the player passes through the door after making the have_key boolean true by picking the key up, the game_end boolean will be true and the game will end.
 	}
-if(CheckCollisionRecs(player.rect,obstacleB)){ //if the player's rectangle comes into contact with the obstacle's, the collision boolean is true.
-		collision = true;
+
+	//preventing the player from passing through the edges of the window.
+	if (player.rect.x <= 0) player.rect.x = 0;
+	if (player.rect.y <= 0) player.rect.y = 0;
+	if (player.rect.x + player.rect.width >= windowWidth) player.rect.x = windowWidth - player.rect.width;
+	if (player.rect.y + player.rect.height >= windowHeight) player.rect.y = windowHeight - player.rect.height;
+
+	//Credit to: https://www.raylib.com/examples.html "collision area".
+	if (((enemy.x + enemy.width) >= GetScreenWidth()) || (enemy.x <= 0)) enemySpeedX *= -1; //if the enemy comes into contact with the edge of the screen it will be sent back the other way and will do the same on the other side, causing it to move back and forth.
+	//End of Credit.
+
+	if (IsKeyDown(KEY_D)) //if the D key is held down, the player's x speed will be added to the player's x value and they will move right.
+	{
+		player.rect.x = player.rect.x + player.speed.x;
 	}
-if(CheckCollisionRecs(player.rect,obstacleC)){ //if the player's rectangle comes into contact with the obstacle's, the collision boolean is true.
-		collision = true;
+	if (IsKeyDown(KEY_A)) //if the A key is held down, the player's x speed will be taken from the player's x value and they will move left.
+	{
+		player.rect.x = player.rect.x - player.speed.x;
 	}
-if(CheckCollisionRecs(player.rect,obstacleD)){//if the player's rectangle comes into contact with the obstacle's, the collision boolean is true.
-		collision = true;
+	if (IsKeyDown(KEY_S))//if the S key is held down, the player's y speed will be added to the player's y value and they will move down.
+	{
+		player.rect.y = player.rect.y + player.speed.y;
 	}
-if(CheckCollisionRecs(player.rect,pit)){//if the player's rectangle comes into contact with the pit's, the collision boolean is true.
-		collision = true;
+	if (IsKeyDown(KEY_W)) //if the W key is held down, the player's y speed will be taken to the player's y value and they will move up.
+	{
+		player.rect.y = player.rect.y - player.speed.y;
 	}
-if(CheckCollisionRecs(player.rect,key)){ //if the player's rectangle comes into contact with the key's, they have picked up the key.
-        PlaySound(sound); //a sound will play when the player's rectangle comes into contact with the key's.
-        have_key = true; //the state of having the key is true.
-}
-if(CheckCollisionRecs(player.rect, door) && have_key){ 
-    game_end = true; //if the player passes through the door after making the have_key boolean true by picking the key up, the game_end boolean will be true and the game will end.
-}
 
-//Credit to: https://www.raylib.com/examples.html "collision area".
-if (((enemy.x + enemy.width) >= GetScreenWidth()) || (enemy.x <= 0)) enemySpeedX *= -1; //if the enemy comes into contact with the edge of the screen it will be sent back the other way and will do the same on the other side, causing it to move back and forth.
-//End of Credit.
+	BeginDrawing(); //initializes sprites to be drawn.
 
-if (IsKeyDown(KEY_D)) //if the D key is held down, the player's x speed will be added to the player's x value and they will move right.
-{
-    player.rect.x = player.rect.x + player.speed.x;
-}
-if (IsKeyDown(KEY_A)) //if the A key is held down, the player's x speed will be taken from the player's x value and they will move left.
-{
-    player.rect.x = player.rect.x - player.speed.x;
-}
-if (IsKeyDown(KEY_S))//if the S key is held down, the player's y speed will be added to the player's y value and they will move down.
-{
-    player.rect.y = player.rect.y + player.speed.y;
-}
-if (IsKeyDown(KEY_W)) //if the W key is held down, the player's y speed will be taken to the player's y value and they will move up.
-{
-    player.rect.y = player.rect.y - player.speed.y;
-}
+	enemy.x += enemySpeedX; //the enemy's movement speed is added to the enemy's x value.
+	ClearBackground(WHITE); //sets the background colour.
+	DrawTexture(background, 0, 0, WHITE);
 
-BeginDrawing(); //initializes sprites to be drawn.
+	if (collision) { //if the collision boolean is true then a game over screen will appear and the game will end.
+	DrawText("Game Over!",GetScreenHeight()/2.0f, GetScreenHeight()/2.0f, 50, PURPLE); 
+	}
+	else if (game_end){ //else if statement to say that if the game_end boolean is true a game win screen will appear and the game will end.
+	DrawText("You win!",GetScreenHeight()/2.0f, GetScreenHeight()/2.0f, 50, PURPLE); 
+	}
+	else{ //if these booleans are not true then the following will be drawn.
 
-enemy.x += enemySpeedX; //the enemy's movement speed is added to the enemy's x value.
-ClearBackground(WHITE); //sets the background colour.
-if (collision) { //if the collision boolean is true then a game over screen will appear and the game will end.
- DrawText("Game Over!",GetScreenHeight()/2.0f, GetScreenHeight()/2.0f, 50, PURPLE); 
-}
-else if (game_end){ //else if statement to say that if the game_end boolean is true a game win screen will appear and the game will end.
-   DrawText("You win!",GetScreenHeight()/2.0f, GetScreenHeight()/2.0f, 50, PURPLE); 
-}
-else{ //if these booleans are not true then the following will be drawn.
+	DrawRectangleRec(player.rect,player.color); //setting the measurements and colour of the player using the previously established variables from the player struct.
+	DrawRectangleRec(enemy, GOLD);//setting the measurements of the enemy and using the previously established variables from their Rectangle structs. Also setting its colours.
+	DrawRectangleRec(obstacleA, RED);//setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
+	DrawRectangleRec(obstacleB, RED); //setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
+	DrawRectangleRec(obstacleC, RED);//setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
+	DrawRectangleRec(obstacleD, RED);//setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
+	DrawRectangleRec(pit, PURPLE);//setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
+	DrawRectangleRec(door, GREEN);//setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
+	DrawText("Collect the yellow key and", 20, 80, 20, BLACK); //instructional text to be displayer in the upper left hand area of the window.
+	DrawText("escape through the green door!", 20, 100, 20, BLACK);//the bottom half of the instructional text to be displayer in the upper left hand area of the window.
+	}
 
-DrawRectangleRec(player.rect,player.color); //setting the measurements and colour of the player using the previously established variables from the player struct.
-DrawRectangleRec(enemy, GOLD);//setting the measurements of the enemy and using the previously established variables from their Rectangle structs. Also setting its colours.
-DrawRectangleRec(obstacleA, RED);//setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
-DrawRectangleRec(obstacleB, RED); //setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
-DrawRectangleRec(obstacleC, RED);//setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
-DrawRectangleRec(obstacleD, RED);//setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
-DrawRectangleRec(pit, PURPLE);//setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
-DrawRectangleRec(door, GREEN);//setting the measurements of the obstacles and using the previously established variables from their Rectangle structs. Also setting their colours.
-DrawText("Collect the yellow key and", 20, 80, 20, BLACK); //instructional text to be displayer in the upper left hand area of the window.
-DrawText("escape through the green door!", 20, 100, 20, BLACK);//the bottom half of the instructional text to be displayer in the upper left hand area of the window.
-}
+	if (!have_key) {//only draw the key if the have_key boolean is false.
+	DrawRectangleRec(key, YELLOW); //have the key disappear if the player picks it up, and be drawn if they have not.
+	}
 
-if (!have_key) {//only draw the key if the have_key boolean is false.
-DrawRectangleRec(key, YELLOW); //have the key disappear if the player picks it up, and be drawn if they have not.
-}
-
-EndDrawing(); //stop drawing objects and text.
-}
+	EndDrawing(); //stop drawing objects and text.
+	}
+UnloadTexture(background);
 CloseAudioDevice(); //if what is contained within the above while loop stops, then close the audio device.
 CloseWindow();//if what is contained within the above while loop stops, then close the window.
 }
