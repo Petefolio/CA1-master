@@ -24,7 +24,7 @@ player.rect.y = windowHeight-player.rect.height; //the player's y position is he
 player.speed.x = 10; //the speed the player travels at along the x axis.
 player.speed.y = 10; //the speed the player travels at along the y axis.
 
-Music music = LoadMusicStream("resources/bg_music.wav"); //loads in the background music from the resources folder to be used later.
+Music music = LoadMusicStream("resources/backg_music.wav"); //loads in the background music from the resources folder to be used later.
 Sound sound = LoadSound("resources/collect.wav"); //loads in a pick up sound effect from the resources folder to be used later.
 PlayMusicStream(music); //starts the music playing.
 
